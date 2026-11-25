@@ -1,5 +1,11 @@
+import multiprocessing
 import os
 import sys
+import threading
+
+# Vercel / AWS Lambda lacks /dev/shm, causing multiprocessing.Lock() (used by
+# Gradio's CSVLogger in gr.Examples) to fail with FileNotFoundError.
+multiprocessing.Lock = threading.Lock
 
 # Ensure the ScamShield_AI directory is on sys.path when invoked from repo root
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
